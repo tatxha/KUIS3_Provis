@@ -52,13 +52,13 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const Route(title: 'Produk'),
+      home: SignUpPage(),
     );
   }
 }
 
-class Route extends StatefulWidget {
-  const Route({super.key, required this.title});
+class RoutePage extends StatefulWidget {
+  const RoutePage({super.key});
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -69,21 +69,22 @@ class Route extends StatefulWidget {
   // used by the build method of the State. Fields in a Widget subclass are
   // always marked "final".
 
-  final String title;
+  // final String title;
 
   @override
-  State<Route> createState() => _RouteState();
+  State<RoutePage> createState() => _RoutePageState();
 }
 
-class _RouteState extends State<Route> {
+class _RoutePageState extends State<RoutePage> {
   int _selectedIndex = 0;
 
   List<Widget> _pages = [
     // LoginPage(),
     // SignUpPage(),
+    // SignUpPage(),
     HomePage(),
     ChartPage(),
-    OrdersPage(),
+    ChartPage(),
   ];
 
   @override
