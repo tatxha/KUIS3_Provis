@@ -98,8 +98,8 @@ class _LoginPageState extends State<LoginPage> {
                     style: TextStyle(fontSize: 18,),
                   ),
                   Text(
-                    'Sign Up',
-                    style: TextStyle(fontSize: 18, color: Colors.deepPurple),
+                    'Sign up',
+                    style: TextStyle(fontSize: 18, color: Colors.deepPurple, fontWeight: FontWeight.w700),
                   ),
                 ],
               )
