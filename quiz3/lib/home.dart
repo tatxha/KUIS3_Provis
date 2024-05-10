@@ -27,7 +27,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text("Produk"),
+        title: Text("Barayafoods"),
         automaticallyImplyLeading: false,
       ),
       body: Column(
@@ -36,12 +36,16 @@ class _HomePageState extends State<HomePage> {
           padding: const EdgeInsets.all(10.0),
           child: TextField(
             decoration: InputDecoration(
-              hintText: 'Search products...', // Teks hint untuk input field
+              hintText: 'Search foods...', // Teks hint untuk input field
               prefixIcon: Icon(Icons.search), // Icon pencarian di sebelah kiri input field
-              border: OutlineInputBorder(), // Atur border input field
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15.0),
+                borderSide: BorderSide(
+                  color: Theme.of(context).colorScheme.inversePrimary,
+                ),
+              ),
             ),
             onChanged: (value) {
-              // Logika pencarian produk bisa diimplementasikan di sini
             },
           ),
         ),
