@@ -4,6 +4,7 @@ import 'package:quiz3/chart.dart';
 import 'package:quiz3/home.dart';
 import 'package:quiz3/login.dart';
 import 'package:quiz3/model/product.dart';
+import 'package:quiz3/orders.dart';
 import 'package:quiz3/provider/product_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:quiz3/signup.dart';
@@ -79,6 +80,7 @@ class _RoutePageState extends State<RoutePage> {
 
   List<Widget> _pages = [
     // LoginPage(),
+    // SignUpPage(),
     // SignUpPage(),
     HomePage(),
     ChartPage(),

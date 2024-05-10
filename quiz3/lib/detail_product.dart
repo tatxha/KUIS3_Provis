@@ -50,38 +50,120 @@ class ProductDetailPage extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.inversePrimary,
-                              borderRadius: BorderRadius.circular(8.0)
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 4.0, bottom: 4.0),
-                              child: Text(
-                                product.category,
-                                style: TextStyle(fontSize: 18.0),
-                              ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                            child: Row(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 8.0),
+                                  child: Container(
+                                    padding: EdgeInsets.only(right: 8.0),
+                                    width: MediaQuery.of(context).size.width * 0.6,
+                                    child: Text(
+                                      product.title,
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.w600),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                    child: Container(
+                                      child: Text(
+                                        '\$${product.price}',
+                                        textAlign: TextAlign.right,
+                                        style: TextStyle(fontSize: 22),
+                                      ),
+                                    ),
+                                  ),
+                              ],
                             ),
                           ),
                           SizedBox(height: 15.0),
                           Text(
-                            product.title,
-                            style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.w600),
-                          ),
-                          SizedBox(height: 5.0),
-                          Text(
-                            '\$${product.price}',
-                            style: TextStyle(fontSize: 22.0),
-                          ),
-                          SizedBox(height: 15.0),
-                          Text(
-                            'Deskripsi Produk:',
+                            'Description:',
                             style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w600),
                           ),
                           SizedBox(height: 5.0),
                           Text(
                             product.description,
                             style: TextStyle(fontSize: 20.0),
+                          ),
+                          SizedBox(height: 15.0),
+                          Text(
+                            'Detail Information:',
+                            style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w600),
+                          ),
+                          SizedBox(height: 5.0),
+                          Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 8.0),
+                                    child: Container(
+                                      
+                                      width: MediaQuery.of(context).size.width * 0.2,
+                                      child: Text(
+                                        'Location:',
+                                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(child:
+                                    Container(                                     child: Text(
+                                        'Loyem Ipcum',
+                                        style: TextStyle(fontSize: 18),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              SizedBox(height: 5,),
+                              Row(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 8.0),
+                                    child: Container(
+                                      width: MediaQuery.of(context).size.width * 0.2,
+                                      child: Text(
+                                        'Message:',
+                                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(child:
+                                    Container(                                     child: Text(
+                                        'Loyem Ipcum',
+                                        style: TextStyle(fontSize: 18),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              SizedBox(height: 5,),
+                              Row(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 8.0),
+                                    child: Container(
+                                      width: MediaQuery.of(context).size.width * 0.2,
+                                      child: Text(
+                                        'Type:',
+                                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(child:
+                                    Container(                                     child: Text(
+                                        'Loyem Ipcum',
+                                        style: TextStyle(fontSize: 18),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -117,6 +199,7 @@ class ProductDetailPage extends StatelessWidget {
                 style: TextStyle(fontSize: 24.0),
               ),
             ),
+            SizedBox(height: 30,),
             // Add more details here
           ],
         ),
