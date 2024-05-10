@@ -17,6 +17,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  bool fetched = false;
+
   int _selectedIndex = 0;
 
   AuthService auth = AuthService();
@@ -47,6 +49,11 @@ class _HomePageState extends State<HomePage> {
     }
 
     var cart = context.watch<CartProvider>();
+
+    if (cart.items.isEmpty && !fetched) {
+      cart.fetchData(context);
+      fetched = true;
+    }
   
     // Mendapatkan informasi tentang ukuran layar perangkat
     final screenWidth = MediaQuery.of(context).size.width;

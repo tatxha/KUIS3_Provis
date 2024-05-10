@@ -1,17 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:quiz3/auth/auth.dart';
 import 'package:quiz3/main.dart';
+import 'package:quiz3/model/cart.dart';
 import 'package:quiz3/model/product.dart';
+import 'package:quiz3/provider/cart_provider.dart';
 import 'package:quiz3/provider/product_provider.dart';
 import 'package:provider/provider.dart';
 
 class ProductDetailPage extends StatelessWidget {
   final Product product;
 
-  const ProductDetailPage({Key? key, required this.product}) : super(key: key);
+  ProductDetailPage({Key? key, required this.product}) : super(key: key);
+
+  AuthService auth = AuthService();
 
   @override
   Widget build(BuildContext context) {
     var value = context.watch<ProductProvider>();
+
+    var cart = context.watch<CartProvider>();
 
     return Scaffold(
       appBar: AppBar(
@@ -25,7 +32,19 @@ class ProductDetailPage extends StatelessWidget {
             Container(
               width: MediaQuery.of(context).size.width * 0.4,
               height: MediaQuery.of(context).size.height * 0.4,
-              child: Image.network(product.img_name, fit: BoxFit.contain,)),
+              child: Image.network(
+                ProductProvider.url + "items_image/" + product.id,
+                headers: <String, String>{
+                  'accept': 'application/json',
+                  'Authorization': 'Bearer ${auth.getToken()}',
+                },
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return Center(child: CircularProgressIndicator());
+                },
+                fit: BoxFit.contain,
+              )
+            ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -70,7 +89,7 @@ class ProductDetailPage extends StatelessWidget {
                                 Expanded(
                                     child: Container(
                                       child: Text(
-                                        '\$${product.price}',
+                                        'Rp${product.price}',
                                         textAlign: TextAlign.right,
                                         style: TextStyle(fontSize: 22),
                                       ),
@@ -175,25 +194,26 @@ class ProductDetailPage extends StatelessWidget {
             ),
             SizedBox(height: 10.0,),
             ElevatedButton(
-              onPressed: () {
-                bool productExists = value.isProductExists(product.id);
-                  if (!productExists) {
-                    value.add(product);
+              onPressed: () async {
+                bool productExists = cart.isProductExists(product.id);
+                if (!productExists) {
+                  var id = await auth.getId();
+                  cart.add(context, Cart(item_id: product.id, user_id: id, quantity: '1', id: ''));
 
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('Added to Chart successfully'),
-                        duration: Duration(seconds: 1),
-                      ),
-                    );
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('Product already exists in the chart'),
-                        duration: Duration(seconds: 1),
-                      ),
-                    );
-                  }
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Added to Cart successfully'),
+                      duration: Duration(seconds: 1),
+                    ),
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Food already exists in the cart. Go to cart to add quantity'),
+                      duration: Duration(seconds: 1),
+                    ),
+                  );
+                }
               },
               child: Text(
                 'Add to Cart',
