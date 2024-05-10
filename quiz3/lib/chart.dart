@@ -13,31 +13,15 @@ class ChartPage extends StatefulWidget {
 
 class _ChartPageState extends State<ChartPage> {
   int _selectedIndex = 0;
-
-  AuthService auth = AuthService();
-  String _token = "";
-
-  @override
-  void initState() {
-    super.initState();
-    _fetchToken();
-  }
-
-  Future<void> _fetchToken() async {
-    // Fetch the token asynchronously
-    _token = await auth.getToken();
-    // Once token is fetched, trigger a rebuild of the widget tree
-    setState(() {});
-  }
+  int quantity = 1;
+  // double totalPrice = 0;
 
   @override
   Widget build(BuildContext context) {
-    var value = context.watch<CartProvider>();
-
-    if (value.items.isEmpty) {
-      value.fetchData(context);
-    }
-
+    var value = context.watch<ProductProvider>();
+    // if (totalPrice == 0 && value.chart.isNotEmpty) {
+    //   totalPrice = double.parse(value.chart.first.price);
+    // }
     return Scaffold(
       appBar: AppBar(
         title: Text('Chart'),
@@ -47,95 +31,189 @@ class _ChartPageState extends State<ChartPage> {
 
       body: SingleChildScrollView(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            Container(
+              padding: EdgeInsets.all(8.0),
+              margin: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              decoration: BoxDecoration(
+                color: Colors.white, // Atur warna latar belakang sesuai kebutuhan
+                borderRadius: BorderRadius.circular(10), // Atur border radius sesuai kebutuhan
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 1,
+                    blurRadius: 4,
+                    offset: Offset(0, 3), // changes position of shadow
+                  ),
+                ],
+              ),
+              child: Column(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.inversePrimary,
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                    padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
+                    child: Text(
+                          'Waiting for payment',
+                          style: TextStyle(fontSize: 18),
+                    ),
+                  ),
+                  SizedBox(height: 15,),
+                  Row(
+                    children: [
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 10.0),
+                        width: MediaQuery.of(context).size.width * 0.5,
+                          child: Row(
+                            children: [
+                              Text('Total Orders: ', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
+                              Text('00.00', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
+                            ],
+                          ),
+                      ),
+                      Expanded(child:
+                        ElevatedButton(
+                          onPressed: () {
+                          },
+                          child: Text('Pay Now'),
+                        ),
+                      )
+                    ],
+                  ),
+                ],
+              ),
+            ),
             ListView.builder(
               shrinkWrap: true,
               physics: NeverScrollableScrollPhysics(),
               itemCount: value.chart.length,
               itemBuilder: (context, index) {
-                final product = value.items[index];
-                return Container(
-                  padding: EdgeInsets.all(8.0),
-                  margin: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                final product = value.chart[index];
+                return 
+                Container(
+                  padding: EdgeInsets.all(5.0),
+                  margin: EdgeInsets.symmetric(horizontal: 5.0, vertical: 3.0),
                   decoration: BoxDecoration(
-                  color: Colors.white, // Atur warna latar belakang sesuai kebutuhan
-                  borderRadius: BorderRadius.circular(10), // Atur border radius sesuai kebutuhan
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 1,
-                      blurRadius: 4,
-                      offset: Offset(0, 3), // changes position of shadow
-                    ),
-                  ],
-                ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: Row(
-                      children: [
-                        Container(
-                          width: MediaQuery.of(context).size.width * 0.15,
-                          height: MediaQuery.of(context).size.height * 0.15,
-                          child: Image.network(
-                            ProductProvider.url + "items_image/" + product.id,
-                            headers: <String, String>{
-                              'accept': 'application/json',
-                              'Authorization': 'Bearer $_token',
-                            },
-                            loadingBuilder: (context, child, loadingProgress) {
-                              if (loadingProgress == null) return child;
-                              return Center(child: CircularProgressIndicator());
-                            },
-                            fit: BoxFit.contain,
-                          ),
+                    color: Colors.white, // Atur warna latar belakang sesuai kebutuhan
+                    borderRadius: BorderRadius.circular(10), // Atur border radius sesuai kebutuhan
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 1,
+                        blurRadius: 4,
+                        offset: Offset(0, 3), // changes position of shadow
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.2,
+                        height: MediaQuery.of(context).size.height * 0.2,
+                        child: Image.network(
+                          product.image, 
+                          fit: BoxFit.contain,
                         ),
-                        SizedBox(width: 16.0),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 5.0, right: 5.0),
+                      ),
+                      Expanded(
+                        child: Container(
+                          padding: EdgeInsets.only(left: 12.0),
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Container(
-                                width: MediaQuery.of(context).size.width * 0.43,
-                                child: Text(
-                                  product.title,
-                                  maxLines: 2, // Atur jumlah maksimum baris menjadi 2
-                                overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
-                                ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    width: MediaQuery.of(context).size.width * 0.4,
+                                    child: Text(
+                                      product.title,
+                                      maxLines: 2, // Atur jumlah maksimum baris menjadi 2
+                                    overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                ],
                               ),
-                              SizedBox(height: 8.0),
-                              Text(
-                                '\$${product.price}',
-                                style: TextStyle(fontSize: 14.0),
+                              SizedBox(height: 5,),
+                              Row(
+                                // mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    width: MediaQuery.of(context).size.width * 0.2,
+                                    child: Row(children: [
+                                        Text('Total: ', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                                        Text('\$${product.totalPrice}', style: TextStyle(fontSize: 14)),
+                                        // Text('${product.totalPrice.toStringAsFixed(2)}', style: TextStyle(fontSize: 14)),
+                                        // Expanded(child: Text('$totalPrice')),
+                                      ],
+                                    ),
+                                  ),
+                                  Expanded(child: 
+                                    Container(
+                                      child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        IconButton(
+                                          icon: Container(
+                                            color: Theme.of(context).colorScheme.inversePrimary,
+                                            // decoration: BoxDecoration(
+                                            //   borderRadius: BorderRadius.circular(5.0)
+                                            // ),
+                                            child: Icon(Icons.remove),
+                                          ),
+                                          onPressed: () {
+                                            setState(() {
+                                              if (product.quantity > 1) {
+                                                product.quantity--;
+                                                product.totalPrice = double.parse(product.price) * product.quantity;
+                                              }
+                                            });
+                                          },
+                                        ),
+                                        Text(
+                                          '${product.quantity}',
+                                          style: TextStyle(fontSize: 16),
+                                        ),
+                                        IconButton(
+                                          icon: Container(
+                                            color: Theme.of(context).colorScheme.inversePrimary,
+                                            // decoration: BoxDecoration(
+                                            //   borderRadius: BorderRadius.circular(5.0)
+                                            // ),
+                                            child: Icon(Icons.add),
+                                          ),
+                                          onPressed: () {
+                                            setState(() {
+                                              product.quantity++;
+                                              product.totalPrice = double.parse(product.price) * product.quantity;
+                                            });
+                                          },
+                                        ),
+                                      ],
+                                                                    ),
+                                    ),
+                                  ),
+                                ],
                               ),
+                              SizedBox(height: 10,),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      value.remove(product);
+                                    },
+                                    child: Text('Delete', style: TextStyle(fontSize: 20),),
+                                  ),
+                                ],
+                              )
                             ],
                           ),
                         ),
-                        Expanded(
-                          child: Align(
-                            alignment: Alignment.centerRight,
-                            child: GestureDetector(
-                              onTap: () {
-                                // value.remove(product);
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context).colorScheme.inversePrimary,
-                                  borderRadius: BorderRadius.circular(8.0),
-                                ),
-                                padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-                                child: Text(
-                                  'Cancel',
-                                  style: TextStyle(fontSize: 18.0),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                      )
+                    ],
                   ),
                 );
               },

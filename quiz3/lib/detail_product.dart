@@ -133,7 +133,8 @@ class ProductDetailPage extends StatelessWidget {
                                     ),
                                   ),
                                   Expanded(child:
-                                    Container(                                     child: Text(
+                                    Container(                                     
+                                      child: Text(
                                         'Loyem Ipcum',
                                         style: TextStyle(fontSize: 18),
                                       ),
