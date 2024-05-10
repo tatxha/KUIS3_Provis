@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:quiz3/detail_product.dart';
 import 'package:quiz3/chart.dart';
 import 'package:quiz3/home.dart';
+import 'package:quiz3/login.dart';
 import 'package:quiz3/model/product.dart';
 import 'package:quiz3/provider/product_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:quiz3/signup.dart';
 
 void main() {
   runApp(
@@ -76,6 +78,8 @@ class _RouteState extends State<Route> {
   int _selectedIndex = 0;
 
   List<Widget> _pages = [
+    // LoginPage(),
+    SignUpPage(),
     HomePage(),
     ChartPage(),
   ];
@@ -93,6 +97,10 @@ class _RouteState extends State<Route> {
           BottomNavigationBarItem(
             icon: Icon(Icons.shopping_cart),
             label: 'Chart',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.list_alt_rounded),
+            label: 'Orders',
           ),
         ],
         currentIndex: _selectedIndex,
