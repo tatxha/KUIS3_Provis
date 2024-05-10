@@ -25,7 +25,7 @@ class _LoginPageState extends State<LoginPage> {
 
     User user = User(username: username, password: password);
 
-    bool isSucceed = await _auth.login(context,user);
+    bool isSucceed = await _auth.login(context, user);
 
     return isSucceed;
   }

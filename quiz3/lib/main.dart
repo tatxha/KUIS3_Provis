@@ -5,16 +5,24 @@ import 'package:quiz3/home.dart';
 import 'package:quiz3/login.dart';
 import 'package:quiz3/model/product.dart';
 import 'package:quiz3/orders.dart';
+import 'package:quiz3/provider/cart_provider.dart';
 import 'package:quiz3/provider/product_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:quiz3/signup.dart';
 
 void main() {
   runApp(
-    ChangeNotifierProvider<ProductProvider>(
-      create: (context) => ProductProvider(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => ProductProvider()),
+        ChangeNotifierProvider(create: (context) => CartProvider()),
+      ],
       child: const MyApp(),
     ),
+    // ChangeNotifierProvider<ProductProvider>(
+    //   create: (context) => ProductProvider(),
+    //   child: const MyApp(),
+    // ),
   );
 }
 
@@ -24,11 +32,11 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    final value = Provider.of<ProductProvider>(context);
+    // final value = Provider.of<ProductProvider>(context);
 
-    if (value.products.isEmpty) {
-      value.fetchData();
-    }
+    // if (value.products.isEmpty) {
+    //   value.fetchData();
+    // }
     
     return MaterialApp(
       title: 'Flutter Demo',
@@ -81,9 +89,7 @@ class _RoutePageState extends State<RoutePage> {
   List<Widget> _pages = [
     // LoginPage(),
     // SignUpPage(),
-    // SignUpPage(),
     HomePage(),
-    ChartPage(),
     ChartPage(),
   ];
 

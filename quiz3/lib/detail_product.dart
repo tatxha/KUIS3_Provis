@@ -25,7 +25,7 @@ class ProductDetailPage extends StatelessWidget {
             Container(
               width: MediaQuery.of(context).size.width * 0.4,
               height: MediaQuery.of(context).size.height * 0.4,
-              child: Image.network(product.image, fit: BoxFit.contain,)),
+              child: Image.network(product.img_name, fit: BoxFit.contain,)),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

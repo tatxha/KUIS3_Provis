@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:quiz3/auth/auth.dart';
 import 'package:quiz3/detail_product.dart';
 import 'package:quiz3/chart.dart';
 import 'package:quiz3/model/product.dart';
 import 'package:quiz3/provider/product_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -15,8 +17,30 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
 
+  AuthService auth = AuthService();
+  String _token = "";
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchToken();
+  }
+
+  Future<void> _fetchToken() async {
+    // Fetch the token asynchronously
+    _token = await auth.getToken();
+    // Once token is fetched, trigger a rebuild of the widget tree
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
+
+    final value = Provider.of<ProductProvider>(context);
+
+    if (value.products.isEmpty) {
+      value.fetchData();
+    }
   
     // Mendapatkan informasi tentang ukuran layar perangkat
     final screenWidth = MediaQuery.of(context).size.width;
@@ -94,7 +118,15 @@ class _HomePageState extends State<HomePage> {
                               width: productWidth * 0.7, // Mengambil 70% dari lebar kolom
                               height: productWidth * 0.7,
                               child: Image.network(
-                                product.image,
+                                ProductProvider.url + "items_image/" + product.id,
+                                headers: <String, String>{
+                                  'accept': 'application/json',
+                                  'Authorization': 'Bearer $_token',
+                                },
+                                loadingBuilder: (context, child, loadingProgress) {
+                                  if (loadingProgress == null) return child;
+                                  return Center(child: CircularProgressIndicator());
+                                },
                                 fit: BoxFit.contain,
                               ),
                             ),
@@ -110,7 +142,7 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                   SizedBox(height: 5.0),
                                   Text(
-                                    '\$${product.price}',
+                                    'Rp${product.price}',
                                     style: TextStyle(fontSize: 15.0),
                                   ),
                                   SizedBox(height: 8.0),

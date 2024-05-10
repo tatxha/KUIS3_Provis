@@ -55,7 +55,7 @@ class _OrdersPageState extends State<OrdersPage> {
                           width: MediaQuery.of(context).size.width * 0.15,
                           height: MediaQuery.of(context).size.height * 0.15,
                           child: Image.network(
-                            product.image, // Use network image
+                            product.img_name, // Use network image
                             // width: 100,
                             fit: BoxFit.contain,
                           ),

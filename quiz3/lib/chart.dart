@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:quiz3/auth/auth.dart';
 import 'package:quiz3/main.dart';
+import 'package:quiz3/provider/cart_provider.dart';
 import 'package:quiz3/provider/product_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:quiz3/model/product.dart';
@@ -11,9 +13,30 @@ class ChartPage extends StatefulWidget {
 
 class _ChartPageState extends State<ChartPage> {
   int _selectedIndex = 0;
+
+  AuthService auth = AuthService();
+  String _token = "";
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchToken();
+  }
+
+  Future<void> _fetchToken() async {
+    // Fetch the token asynchronously
+    _token = await auth.getToken();
+    // Once token is fetched, trigger a rebuild of the widget tree
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
-    var value = context.watch<ProductProvider>();
+    var value = context.watch<CartProvider>();
+
+    if (value.items.isEmpty) {
+      value.fetchData(context);
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -31,7 +54,7 @@ class _ChartPageState extends State<ChartPage> {
               physics: NeverScrollableScrollPhysics(),
               itemCount: value.chart.length,
               itemBuilder: (context, index) {
-                final product = value.chart[index];
+                final product = value.items[index];
                 return Container(
                   padding: EdgeInsets.all(8.0),
                   margin: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
@@ -55,8 +78,15 @@ class _ChartPageState extends State<ChartPage> {
                           width: MediaQuery.of(context).size.width * 0.15,
                           height: MediaQuery.of(context).size.height * 0.15,
                           child: Image.network(
-                            product.image, // Use network image
-                            // width: 100,
+                            ProductProvider.url + "items_image/" + product.id,
+                            headers: <String, String>{
+                              'accept': 'application/json',
+                              'Authorization': 'Bearer $_token',
+                            },
+                            loadingBuilder: (context, child, loadingProgress) {
+                              if (loadingProgress == null) return child;
+                              return Center(child: CircularProgressIndicator());
+                            },
                             fit: BoxFit.contain,
                           ),
                         ),
@@ -88,7 +118,7 @@ class _ChartPageState extends State<ChartPage> {
                             alignment: Alignment.centerRight,
                             child: GestureDetector(
                               onTap: () {
-                                value.remove(product);
+                                // value.remove(product);
                               },
                               child: Container(
                                 decoration: BoxDecoration(
