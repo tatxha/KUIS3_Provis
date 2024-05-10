@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:quiz3/auth/auth.dart';
 import 'package:quiz3/detail_product.dart';
 import 'package:quiz3/chart.dart';
+import 'package:quiz3/model/cart.dart';
 import 'package:quiz3/model/product.dart';
+import 'package:quiz3/provider/cart_provider.dart';
 import 'package:quiz3/provider/product_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
@@ -19,6 +21,7 @@ class _HomePageState extends State<HomePage> {
 
   AuthService auth = AuthService();
   String _token = "";
+  String _user_id = "";
 
   @override
   void initState() {
@@ -29,6 +32,7 @@ class _HomePageState extends State<HomePage> {
   Future<void> _fetchToken() async {
     // Fetch the token asynchronously
     _token = await auth.getToken();
+    _user_id = await auth.getId();
     // Once token is fetched, trigger a rebuild of the widget tree
     setState(() {});
   }
@@ -41,6 +45,8 @@ class _HomePageState extends State<HomePage> {
     if (value.products.isEmpty) {
       value.fetchData();
     }
+
+    var cart = context.watch<CartProvider>();
   
     // Mendapatkan informasi tentang ukuran layar perangkat
     final screenWidth = MediaQuery.of(context).size.width;
@@ -148,20 +154,20 @@ class _HomePageState extends State<HomePage> {
                                   SizedBox(height: 8.0),
                                   ElevatedButton(
                                     onPressed: () {
-                                      bool productExists = value.isProductExists(product.id);
+                                      bool productExists = cart.isProductExists(product.id);
                                       if (!productExists) {
-                                        value.add(product);
+                                        cart.add(context, Cart(item_id: product.id, user_id: _user_id, quantity: '1', id: ''));
 
                                         ScaffoldMessenger.of(context).showSnackBar(
                                           SnackBar(
-                                            content: Text('Added to Chart successfully'),
+                                            content: Text('Added to Cart successfully'),
                                             duration: Duration(seconds: 1),
                                           ),
                                         );
                                       } else {
                                         ScaffoldMessenger.of(context).showSnackBar(
                                           SnackBar(
-                                            content: Text('Product already exists in the chart'),
+                                            content: Text('Food already exists in the cart. Go to cart to add quantity'),
                                             duration: Duration(seconds: 1),
                                           ),
                                         );

@@ -1,7 +1,7 @@
 class Cart {
   final String item_id;
   final String user_id;
-  final String quantity;
+  String quantity;
   final String id;
 
   Cart({
@@ -13,10 +13,9 @@ class Cart {
 
   Map<String, dynamic> toJson() {
     return {
-      'item_id': item_id,
-      'user_id': user_id,
-      'quantity': quantity,
-      'id': id,
+      'item_id': int.parse(item_id),
+      'user_id': int.parse(user_id),
+      'quantity': int.parse(quantity),
     };
   }
 

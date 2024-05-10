@@ -19,10 +19,6 @@ void main() {
       ],
       child: const MyApp(),
     ),
-    // ChangeNotifierProvider<ProductProvider>(
-    //   create: (context) => ProductProvider(),
-    //   child: const MyApp(),
-    // ),
   );
 }
 

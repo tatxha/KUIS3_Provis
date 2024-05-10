@@ -29,13 +29,16 @@ class CartProvider extends ChangeNotifier {
         headers: <String, String>{
           'accept': 'application/json',
           'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
         },
       );
       if (response.statusCode == 200) {
         final List<dynamic> cartList = jsonDecode(response.body);
         _chart = cartList.map((json) => Cart.fromJson(json)).toList();
 
+
         for(Cart item in _chart){
+          print("AAAAAAAAAAAAAAAAAAAAAAAA " + item.item_id);
           // Find the product with the same item ID
           Product product = value.products.firstWhere(
             (product) => product.id == item.item_id,
@@ -48,6 +51,9 @@ class CartProvider extends ChangeNotifier {
           }
         }
 
+        int len = cartList.length * 5;
+        print("0000000000000000000000000000000000000000000000000000000000000 "+len.toString());
+
         notifyListeners();
       } else {
         throw Exception('Failed to load data');
@@ -57,17 +63,158 @@ class CartProvider extends ChangeNotifier {
     }
   }
 
-  // void add(Product product) {
-  //   _chart.add(product);
-  //   notifyListeners();
-  // }
+  void add(BuildContext context, Cart item) async {
+    final value = Provider.of<ProductProvider>(context, listen: false);
+    try {
+      String token = await auth.getToken();
+      String user_id = await auth.getId();
+      final response = await http.post(
+        Uri.parse(url + "carts/"),
+        headers: <String, String>{
+          'accept': 'application/json',
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(item.toJson()),
+      );
 
-  // void remove(Product product) {
-  //   _chart.remove(product);
-  //   notifyListeners();
-  // }
+      print(jsonEncode(item.toJson()));
 
-  // bool isProductExists(String productId) {
-  //   return _chart.any((product) => product.id == productId);
-  // }
+      if (response.statusCode == 200) {
+        dynamic json = jsonDecode(response.body);
+        _chart.add(Cart.fromJson(json));
+
+        Product product = value.products.firstWhere(
+          (product) => product.id == item.item_id,
+          orElse: () => Product(id: "", title: "", price: "", description: "", img_name: ""),
+        );
+
+        // If a corresponding product is found, add it to the items list
+        if (product.id != "" && product.title != "") {
+          _items.add(product);
+        }
+
+        notifyListeners();
+      } else {
+        throw Exception('Failed to load data');
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+
+  void remove(BuildContext context, String cartId) async {
+    // notifyListeners();
+    final value = Provider.of<ProductProvider>(context, listen: false);
+    try {
+      String token = await auth.getToken();
+      String user_id = await auth.getId();
+
+      Cart cartDel = _chart.firstWhere(
+        (item) => item.id == cartId,
+        orElse: () => Cart(item_id: '', user_id: '', quantity: '', id: ''),
+      );
+
+      final response = await http.delete(
+        Uri.parse(url + "carts/" + cartId),
+        headers: <String, String>{
+          'accept': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      Product product = value.products.firstWhere(
+        (product) => product.id == cartDel.item_id,
+        orElse: () => Product(id: "", title: "", price: "", description: "", img_name: ""),
+      );
+
+      // If a corresponding product is found, add it to the items list
+      if (product.id != "") {
+        _items.remove(product);
+      }
+
+      _chart.remove(cartDel);
+
+      notifyListeners();
+    } catch (e) {
+      throw Exception('Failed to add data');
+    }
+  }
+
+  void addUpdate(BuildContext context, Cart item) async {
+    final value = Provider.of<ProductProvider>(context, listen: false);
+    try {
+      String token = await auth.getToken();
+      String user_id = await auth.getId();
+      final response = await http.post(
+        Uri.parse(url + "carts/"),
+        headers: <String, String>{
+          'accept': 'application/json',
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(item.toJson()),
+      );
+
+      print(jsonEncode(item.toJson()));
+
+      if (response.statusCode == 200) {
+        // Product product = value.products.firstWhere(
+        //   (product) => product.id == item.item_id,
+        //   orElse: () => Product(id: "", title: "", price: "", description: "", img_name: ""),
+        // );
+
+        // // If a corresponding product is found, add it to the items list
+        // if (product.id != "" && product.title != "") {
+        //   _items.add(product);
+        // }
+
+        notifyListeners();
+      } else {
+        throw Exception('Failed to load data');
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+
+  void removeUpdate(BuildContext context, String cartId) async {
+    // notifyListeners();
+    final value = Provider.of<ProductProvider>(context, listen: false);
+    try {
+      String token = await auth.getToken();
+      String user_id = await auth.getId();
+
+      Cart cartDel = _chart.firstWhere(
+        (item) => item.id == cartId,
+        orElse: () => Cart(item_id: '', user_id: '', quantity: '', id: ''),
+      );
+
+      final response = await http.delete(
+        Uri.parse(url + "carts/" + cartId),
+        headers: <String, String>{
+          'accept': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      // Product product = value.products.firstWhere(
+      //   (product) => product.id == cartDel.item_id,
+      //   orElse: () => Product(id: "", title: "", price: "", description: "", img_name: ""),
+      // );
+
+      // // If a corresponding product is found, add it to the items list
+      // if (product.id != "") {
+      //   _items.remove(product);
+      // }
+
+      notifyListeners();
+    } catch (e) {
+      throw Exception('Failed to add data');
+    }
+  }
+
+  bool isProductExists(String productId) {
+    return _chart.any((product) => product.item_id == productId);
+  }
 }

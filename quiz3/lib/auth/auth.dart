@@ -43,11 +43,11 @@ class AuthService {
       final json = jsonDecode(response.body);
 
       var token = json['access_token'];
-      var id = json['id'];
-      var username = json['username'];
+      var id = json['user_id'].toString();
+      // var username = json['username'];
       setToken(token);
       setId(id);
-      setUsername(username);
+      // setUsername(username);
 
       Navigator.pushReplacement(
         context,
