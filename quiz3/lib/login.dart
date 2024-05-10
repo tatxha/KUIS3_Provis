@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:quiz3/auth/auth.dart';
+import 'package:quiz3/home.dart';
 import 'package:quiz3/main.dart';
+import 'package:quiz3/model/user.dart';
+import 'package:quiz3/signup.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -8,6 +13,23 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   int _selectedIndex = 0;
+
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  AuthService _auth = AuthService();
+
+  Future<bool> _login() async {
+    String username = _usernameController.text;
+    String password = _passwordController.text;
+
+    User user = User(username: username, password: password);
+
+    bool isSucceed = await _auth.login(context,user);
+
+    return isSucceed;
+  }
+
   @override
   Widget build(BuildContext context) {
     // var value = context.watch<ProductProvider>();
@@ -56,7 +78,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               SizedBox(height: 25.0,),
               TextField(
-                // controller: _usernameController,
+                controller: _usernameController,
                 decoration: InputDecoration(
                   hintText: 'Username',
                   labelText: 'Username',
@@ -68,7 +90,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               SizedBox(height: 20),
               TextField(
-                // controller: _passwordController,
+                controller: _passwordController,
                 obscureText: true,
                 decoration: InputDecoration(
                   hintText: 'Password',
@@ -81,7 +103,23 @@ class _LoginPageState extends State<LoginPage> {
               ),
               SizedBox(height: 30),
               ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
+                  bool isSucceed = await _login();
+                  if(isSucceed){
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Login Success!'),
+                        duration: Duration(seconds: 1),
+                      ),
+                    );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Login Failed!'),
+                        duration: Duration(seconds: 1),
+                      ),
+                    );
+                  }
                   // Tambahkan logika autentikasi di sini
                   // String username = _usernameController.text;
                   // String password = _passwordController.text;
@@ -97,9 +135,19 @@ class _LoginPageState extends State<LoginPage> {
                     'Dont have an account? ',
                     style: TextStyle(fontSize: 18,),
                   ),
-                  Text(
-                    'Sign up',
-                    style: TextStyle(fontSize: 18, color: Colors.deepPurple, fontWeight: FontWeight.w700),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SignUpPage(),
+                        ),
+                      );
+                    },
+                    child: Text(
+                      'Sign up',
+                      style: TextStyle(fontSize: 18, color: Colors.deepPurple, fontWeight: FontWeight.w700),
+                    ),
                   ),
                 ],
               )
