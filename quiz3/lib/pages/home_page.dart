@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quiz3/auth/auth.dart';
-import 'package:quiz3/detail_product.dart';
-import 'package:quiz3/chart.dart';
+import 'package:quiz3/pages/detail_product_page.dart';
+import 'package:quiz3/pages/cart_page.dart';
 import 'package:quiz3/model/cart.dart';
 import 'package:quiz3/model/product.dart';
 import 'package:quiz3/provider/cart_provider.dart';
@@ -69,7 +69,6 @@ class _HomePageState extends State<HomePage> {
     var status = context.watch<StatusProvider>();
 
     if(status.current.status == ""){
-      status.unpaid();
       status.fetchData();
     }
 
@@ -106,7 +105,6 @@ class _HomePageState extends State<HomePage> {
             ),
             onChanged: (value) {
               search.setKeyword(value);
-              print(_keywordController.text);
               if(value != "")
                 data.fetchDataKeyword(value);
               else

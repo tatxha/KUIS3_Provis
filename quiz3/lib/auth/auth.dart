@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'dart:convert';
-import 'package:quiz3/home.dart';
+import 'package:quiz3/pages/home_page.dart';
 import 'package:quiz3/main.dart';
 import 'package:quiz3/model/user.dart';
 import 'package:quiz3/provider/product_provider.dart';
@@ -44,10 +44,9 @@ class AuthService {
 
       var token = json['access_token'];
       var id = json['user_id'].toString();
-      // var username = json['username'];
+      
       setToken(token);
       setId(id);
-      // setUsername(username);
 
       Navigator.pushReplacement(
         context,
@@ -77,15 +76,5 @@ class AuthService {
   Future<String> getId() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString('id') ?? "";
-  }
-
-  Future<void> setUsername(String value) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('username', value);
-  }
-
-  Future<String> getUsername() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString('username') ?? "";
   }
 }

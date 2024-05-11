@@ -13,8 +13,8 @@ class CartProvider extends ChangeNotifier {
 
   AuthService auth = AuthService();
 
-  List<Cart> _chart = [];
-  List<Cart> get chart => _chart;
+  List<Cart> _cart = [];
+  List<Cart> get cart => _cart;
 
   List<Product> _items = [];
   List<Product> get items => _items;
@@ -34,10 +34,10 @@ class CartProvider extends ChangeNotifier {
       );
       if (response.statusCode == 200) {
         final List<dynamic> cartList = jsonDecode(response.body);
-        _chart = cartList.map((json) => Cart.fromJson(json)).toList();
+        _cart = cartList.map((json) => Cart.fromJson(json)).toList();
 
 
-        for(Cart item in _chart){
+        for(Cart item in _cart){
           // Find the product with the same item ID
           Product product = value.products.firstWhere(
             (product) => product.id == item.item_id,
@@ -74,11 +74,9 @@ class CartProvider extends ChangeNotifier {
         body: jsonEncode(item.toJson()),
       );
 
-      print(jsonEncode(item.toJson()));
-
       if (response.statusCode == 200) {
         dynamic json = jsonDecode(response.body);
-        _chart.add(Cart.fromJson(json));
+        _cart.add(Cart.fromJson(json));
 
         Product product = value.products.firstWhere(
           (product) => product.id == item.item_id,
@@ -106,7 +104,7 @@ class CartProvider extends ChangeNotifier {
       String token = await auth.getToken();
       String user_id = await auth.getId();
 
-      Cart cartDel = _chart.firstWhere(
+      Cart cartDel = _cart.firstWhere(
         (item) => item.id == cartId,
         orElse: () => Cart(item_id: '', user_id: '', quantity: '', id: ''),
       );
@@ -129,7 +127,7 @@ class CartProvider extends ChangeNotifier {
         _items.remove(product);
       }
 
-      _chart.remove(cartDel);
+      _cart.remove(cartDel);
 
       notifyListeners();
     } catch (e) {
@@ -151,7 +149,7 @@ class CartProvider extends ChangeNotifier {
       );
 
       _items = [];
-      _chart = [];
+      _cart = [];
 
       notifyListeners();
     } catch (e) {
@@ -160,6 +158,6 @@ class CartProvider extends ChangeNotifier {
   }
 
   bool isProductExists(String productId) {
-    return _chart.any((product) => product.item_id == productId);
+    return _cart.any((product) => product.item_id == productId);
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quiz3/auth/auth.dart';
-import 'package:quiz3/home.dart';
-import 'package:quiz3/login.dart';
+import 'package:quiz3/pages/home_page.dart';
+import 'package:quiz3/pages/login_page.dart';
 import 'package:quiz3/main.dart';
 import 'package:quiz3/model/user.dart';
 

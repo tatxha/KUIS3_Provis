@@ -14,12 +14,6 @@ class StatusProvider extends ChangeNotifier {
 
   AuthService auth = AuthService();
 
-  List<Status> _chart = [];
-  List<Status> get chart => _chart;
-
-  List<Product> _items = [];
-  List<Product> get items => _items;
-
   Status _current = Status(user_id: '', status: '', timestamp: '', id: '');
   Status get current => _current;
 
@@ -34,6 +28,9 @@ class StatusProvider extends ChangeNotifier {
           'Authorization': 'Bearer $token',
         },
       );
+
+      print(response.body);
+      
       if (response.statusCode == 200) {
         dynamic json = jsonDecode(response.body);
         _current = Status.fromJsonFetch(json);
@@ -60,10 +57,12 @@ class StatusProvider extends ChangeNotifier {
         body: '',
       );
       if (response.statusCode == 200) {
-        dynamic json = jsonDecode(response.body);
-        _current = Status.fromJson(json);
+        // dynamic json = jsonDecode(response.body);
+        // _current = Status.fromJson(json);
 
-        notifyListeners();
+        fetchData();
+
+        // notifyListeners();
       } else {
         throw Exception('Failed to load data');
       }
@@ -85,10 +84,11 @@ class StatusProvider extends ChangeNotifier {
         body: '',
       );
       if (response.statusCode == 200) {
-        dynamic json = jsonDecode(response.body);
-        _current = Status.fromJsonPembayaran(json);
+        // dynamic json = jsonDecode(response.body);
+        // _current = Status.fromJsonPembayaran(json);
+        fetchData();
 
-        notifyListeners();
+        // notifyListeners();
       } else {
         throw Exception('Failed to load data');
       }
@@ -110,10 +110,12 @@ class StatusProvider extends ChangeNotifier {
         body: '',
       );
       if (response.statusCode == 200) {
-        dynamic json = jsonDecode(response.body);
-        _current = Status.fromJson(json);
+        // dynamic json = jsonDecode(response.body);
+        // _current = Status.fromJson(json);
 
-        notifyListeners();
+        fetchData();
+
+        // notifyListeners();
       } else {
         throw Exception('Failed to load data');
       }
@@ -135,10 +137,12 @@ class StatusProvider extends ChangeNotifier {
         body: '',
       );
       if (response.statusCode == 200) {
-        dynamic json = jsonDecode(response.body);
-        _current = Status.fromJson(json);
+        // dynamic json = jsonDecode(response.body);
+        // _current = Status.fromJson(json);
 
-        notifyListeners();
+        fetchData();
+
+        // notifyListeners();
       } else {
         throw Exception('Failed to load data');
       }
@@ -159,13 +163,14 @@ class StatusProvider extends ChangeNotifier {
         },
         body: '',
       );
-      print(response.body);
+      
       if (response.statusCode == 200) {
-        dynamic json = jsonDecode(response.body);
-        _current = Status.fromJson(json);
-        print(_current.status);
+        // dynamic json = jsonDecode(response.body);
+        // _current = Status.fromJson(json);
 
-        notifyListeners();
+        fetchData();
+
+        // notifyListeners();
       } else {
         throw Exception('Failed to load data');
       }
@@ -187,10 +192,12 @@ class StatusProvider extends ChangeNotifier {
         body: '',
       );
       if (response.statusCode == 200) {
-        dynamic json = jsonDecode(response.body);
-        _current = Status.fromJson(json);
+        // dynamic json = jsonDecode(response.body);
+        // _current = Status.fromJson(json);
 
-        notifyListeners();
+        fetchData();
+
+        // notifyListeners();
       } else {
         throw Exception('Failed to load data');
       }

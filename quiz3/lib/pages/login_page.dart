@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:quiz3/auth/auth.dart';
-import 'package:quiz3/home.dart';
+import 'package:quiz3/pages/home_page.dart';
 import 'package:quiz3/main.dart';
 import 'package:quiz3/model/user.dart';
-import 'package:quiz3/signup.dart';
+import 'package:quiz3/pages/signup_page.dart';
 
 class LoginPage extends StatefulWidget {
   @override

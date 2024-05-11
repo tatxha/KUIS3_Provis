@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:quiz3/detail_product.dart';
-import 'package:quiz3/chart.dart';
-import 'package:quiz3/home.dart';
-import 'package:quiz3/login.dart';
+import 'package:quiz3/pages/detail_product_page.dart';
+import 'package:quiz3/pages/cart_page.dart';
+import 'package:quiz3/pages/home_page.dart';
+import 'package:quiz3/pages/login_page.dart';
 import 'package:quiz3/model/product.dart';
 import 'package:quiz3/model/status.dart';
-import 'package:quiz3/orders.dart';
+import 'package:quiz3/pages/orders_page.dart';
 import 'package:quiz3/provider/cart_provider.dart';
 import 'package:quiz3/provider/product_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:quiz3/provider/search_provider.dart';
 import 'package:quiz3/provider/status_provider.dart';
-import 'package:quiz3/signup.dart';
+import 'package:quiz3/pages/signup_page.dart';
 
 void main() {
   runApp(
@@ -61,8 +61,41 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: SignUpPage(),
+      home: Root(),
       // home: HomePage(),
+    );
+  }
+}
+
+class Root extends StatelessWidget {
+  const Root({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: SafeArea(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text('Kelompok 27'),
+              Text('NIM: 2203484 NAMA: Arya Aydin Margono'),
+              Text('NIM: 2201805 NAMA: Tattha Maharany Yasmin Akbar'),
+              TextButton(
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => SignUpPage(),
+                    ),
+                  );
+                },
+                child: Text('Start App')
+              )
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
@@ -92,7 +125,7 @@ class _RoutePageState extends State<RoutePage> {
     // LoginPage(),
     // SignUpPage(),
     HomePage(),
-    ChartPage(),
+    CartPage(),
     OrdersPage(),
   ];
 
@@ -108,7 +141,7 @@ class _RoutePageState extends State<RoutePage> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.shopping_cart),
-            label: 'Chart',
+            label: 'Cart',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.list_alt_rounded),

@@ -29,7 +29,7 @@ class ProductProvider extends ChangeNotifier {
           'Authorization': 'Bearer $token',
         },
       );
-      print('ULULULULULULULULUL');
+      
       if (response.statusCode == 200) {
         final List<dynamic> productList = jsonDecode(response.body);
         _allProducts = productList.map((json) => Product.fromJson(json)).toList();
