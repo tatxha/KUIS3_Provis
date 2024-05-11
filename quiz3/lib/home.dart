@@ -8,16 +8,21 @@ import 'package:quiz3/provider/cart_provider.dart';
 import 'package:quiz3/provider/product_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
+import 'package:quiz3/provider/search_provider.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  bool fetched = false;
+  final TextEditingController _keywordController = TextEditingController();
+  // SearchProvider search = SearchProvider();
+
+  bool dataFetched = false;
+  bool cartFetched = false;
 
   int _selectedIndex = 0;
 
@@ -35,25 +40,33 @@ class _HomePageState extends State<HomePage> {
     // Fetch the token asynchronously
     _token = await auth.getToken();
     _user_id = await auth.getId();
-    // Once token is fetched, trigger a rebuild of the widget tree
-    setState(() {});
+  }
+
+  @override
+  void dispose() {
+    _keywordController.dispose(); // Dispose the controller
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
 
-    final value = Provider.of<ProductProvider>(context);
+    final data = context.watch<ProductProvider>();
 
-    if (value.products.isEmpty) {
-      value.fetchData();
+    if (data.products.isEmpty && !dataFetched) {
+      data.fetchData();
+      dataFetched = true;
     }
 
     var cart = context.watch<CartProvider>();
 
-    if (cart.items.isEmpty && !fetched) {
+    if (cart.items.isEmpty && !cartFetched) {
       cart.fetchData(context);
-      fetched = true;
+      cartFetched = true;
     }
+
+    final search = context.watch<SearchProvider>();
+    _keywordController.text = search.keyword;
   
     // Mendapatkan informasi tentang ukuran layar perangkat
     final screenWidth = MediaQuery.of(context).size.width;
@@ -72,6 +85,7 @@ class _HomePageState extends State<HomePage> {
         Padding(
           padding: const EdgeInsets.all(10.0),
           child: TextField(
+            controller: _keywordController,
             decoration: InputDecoration(
               hintText: 'Search foods...', // Teks hint untuk input field
               prefixIcon: Icon(Icons.search), // Icon pencarian di sebelah kiri input field
@@ -83,13 +97,19 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             onChanged: (value) {
+              search.setKeyword(value);
+              print(_keywordController.text);
+              if(value != "")
+                data.fetchDataKeyword(value);
+              else
+                data.fetchData();
             },
           ),
         ),
         Expanded(
           child: Consumer<ProductProvider>(
-            builder: (context, value, _) {
-              if(value.products.isEmpty){
+            builder: (context, data, _) {
+              if(data.products.isEmpty){
                 return Center(child: CircularProgressIndicator());
               }
               else{
@@ -97,7 +117,7 @@ class _HomePageState extends State<HomePage> {
                   crossAxisCount: 2, // biar setiap row hanya nampilin 2 produk
                   childAspectRatio: productWidth / (productWidth + 100), // atur tinggi rownya
                   // loop data produk
-                  children: value.products.map((product) {
+                  children: data.products.map((product) {
                     return GestureDetector(
                       onTap: () {
                         Navigator.push(
@@ -199,5 +219,6 @@ class _HomePageState extends State<HomePage> {
     ),
 
     );
+
   }
 }

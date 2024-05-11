@@ -13,7 +13,7 @@ class ChartPage extends StatefulWidget {
 }
 
 class _ChartPageState extends State<ChartPage> {
-  // bool fetched = false;
+  bool fetched = false;
 
   int _selectedIndex = 0;
   int quantity = 1;
@@ -42,16 +42,11 @@ class _ChartPageState extends State<ChartPage> {
     var value = context.watch<CartProvider>();
     var productvalue = context.watch<ProductProvider>();
 
-    // if (value.items.isEmpty && !fetched) {
-    //   value.fetchData(context);
-    //   fetched = true;
-    // }
-
     totalPrice = value.chart.fold(
       0,
       (previousValue, cartItem) =>
           previousValue +
-          double.parse(productvalue.products.firstWhere(
+          double.parse(productvalue.allProducts.firstWhere(
             (product) => product.id == cartItem.item_id,
           ).price) * int.parse(cartItem.quantity),
     );

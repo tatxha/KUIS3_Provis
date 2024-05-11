@@ -10,6 +10,9 @@ class ProductProvider extends ChangeNotifier {
 
   AuthService auth = AuthService();
 
+  List<Product> _allProducts = [];
+  List<Product> get allProducts => _allProducts;
+
   List<Product> _products = [];
   List<Product> get products => _products;
 
@@ -26,26 +29,11 @@ class ProductProvider extends ChangeNotifier {
           'Authorization': 'Bearer $token',
         },
       );
+      print('ULULULULULULULULUL');
       if (response.statusCode == 200) {
         final List<dynamic> productList = jsonDecode(response.body);
-        _products = productList.map((json) => Product.fromJson(json)).toList();
-
-        // for(Product product in _products){
-        //   final responseImg = await http.get(
-        //     Uri.parse(url + "items_image/"+product.id),
-        //     headers: <String, String>{
-        //       'accept': 'application/json',
-        //       'Authorization': 'Bearer $token',
-        //     },
-        //   );
-        //   if (responseImg.statusCode == 200) {
-        //     final dynamic imageData = jsonDecode(responseImg.body);
-        //     print(imageData);
-        //     String imageUrl = imageData; // Adjust according to your API response structure
-        //     _images.add(imageUrl);
-        //   } else {
-        //     throw Exception('Failed to load image');
-        //   }
+        _allProducts = productList.map((json) => Product.fromJson(json)).toList();
+        _products = _allProducts;
         notifyListeners();
       } else {
         throw Exception('Failed to load data');
@@ -55,17 +43,39 @@ class ProductProvider extends ChangeNotifier {
     }
   }
 
-  void add(Product product) {
-    _chart.add(product);
-    notifyListeners();
+  Future<void> fetchDataKeyword(String keyword) async {
+    try {
+      String token = await auth.getToken();
+      final response = await http.get(
+        Uri.parse(url + "search_items/" + keyword),
+        headers: <String, String>{
+          'accept': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      );
+      if (response.statusCode == 200) {
+        final List<dynamic> productList = jsonDecode(response.body);
+        _products = productList.map((json) => Product.fromJson(json)).toList();
+        notifyListeners();
+      } else {
+        throw Exception('Failed to load data');
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
   }
+
+  // void add(Product product) {
+  //   _chart.add(product);
+  //   notifyListeners();
+  // }
 
   void remove(Product product) {
     _chart.remove(product);
     notifyListeners();
   }
 
-  bool isProductExists(String productId) {
-    return _chart.any((product) => product.id == productId);
-  }
+  // bool isProductExists(String productId) {
+  //   return _chart.any((product) => product.id == productId);
+  // }
 }

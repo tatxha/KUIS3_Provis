@@ -8,6 +8,7 @@ import 'package:quiz3/orders.dart';
 import 'package:quiz3/provider/cart_provider.dart';
 import 'package:quiz3/provider/product_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:quiz3/provider/search_provider.dart';
 import 'package:quiz3/signup.dart';
 
 void main() {
@@ -16,6 +17,7 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (context) => ProductProvider()),
         ChangeNotifierProvider(create: (context) => CartProvider()),
+        ChangeNotifierProvider(create: (context) => SearchProvider()),
       ],
       child: const MyApp(),
     ),
