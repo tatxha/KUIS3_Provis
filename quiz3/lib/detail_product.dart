@@ -73,28 +73,28 @@ class ProductDetailPage extends StatelessWidget {
                             padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                             child: Row(
                               children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 8.0),
-                                  child: Container(
-                                    padding: EdgeInsets.only(right: 8.0),
-                                    width: MediaQuery.of(context).size.width * 0.6,
-                                    child: Text(
-                                      product.title,
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.w600),
-                                    ),
-                                  ),
-                                ),
                                 Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(right: 8.0),
                                     child: Container(
+                                      padding: EdgeInsets.only(right: 8.0),
+                                      width: MediaQuery.of(context).size.width * 0.6,
                                       child: Text(
-                                        'Rp${product.price}',
-                                        textAlign: TextAlign.right,
-                                        style: TextStyle(fontSize: 22),
+                                        product.title,
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.w600),
                                       ),
                                     ),
                                   ),
+                                ),
+                                Container(
+                                  child: Text(
+                                    'Rp${product.price}',
+                                    textAlign: TextAlign.right,
+                                    style: TextStyle(fontSize: 22),
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -109,82 +109,6 @@ class ProductDetailPage extends StatelessWidget {
                             style: TextStyle(fontSize: 20.0),
                           ),
                           SizedBox(height: 15.0),
-                          Text(
-                            'Detail Information:',
-                            style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w600),
-                          ),
-                          SizedBox(height: 5.0),
-                          Column(
-                            children: [
-                              Row(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 8.0),
-                                    child: Container(
-                                      
-                                      width: MediaQuery.of(context).size.width * 0.2,
-                                      child: Text(
-                                        'Location:',
-                                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-                                      ),
-                                    ),
-                                  ),
-                                  Expanded(child:
-                                    Container(                                     child: Text(
-                                        'Loyem Ipcum',
-                                        style: TextStyle(fontSize: 18),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                              SizedBox(height: 5,),
-                              Row(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 8.0),
-                                    child: Container(
-                                      width: MediaQuery.of(context).size.width * 0.2,
-                                      child: Text(
-                                        'Message:',
-                                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-                                      ),
-                                    ),
-                                  ),
-                                  Expanded(child:
-                                    Container(                                     
-                                      child: Text(
-                                        'Loyem Ipcum',
-                                        style: TextStyle(fontSize: 18),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                              SizedBox(height: 5,),
-                              Row(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 8.0),
-                                    child: Container(
-                                      width: MediaQuery.of(context).size.width * 0.2,
-                                      child: Text(
-                                        'Type:',
-                                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-                                      ),
-                                    ),
-                                  ),
-                                  Expanded(child:
-                                    Container(                                     child: Text(
-                                        'Loyem Ipcum',
-                                        style: TextStyle(fontSize: 18),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ],
-                          ),
                         ],
                       ),
                     ),

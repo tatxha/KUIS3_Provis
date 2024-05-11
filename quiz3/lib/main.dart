@@ -4,11 +4,13 @@ import 'package:quiz3/chart.dart';
 import 'package:quiz3/home.dart';
 import 'package:quiz3/login.dart';
 import 'package:quiz3/model/product.dart';
+import 'package:quiz3/model/status.dart';
 import 'package:quiz3/orders.dart';
 import 'package:quiz3/provider/cart_provider.dart';
 import 'package:quiz3/provider/product_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:quiz3/provider/search_provider.dart';
+import 'package:quiz3/provider/status_provider.dart';
 import 'package:quiz3/signup.dart';
 
 void main() {
@@ -18,6 +20,7 @@ void main() {
         ChangeNotifierProvider(create: (context) => ProductProvider()),
         ChangeNotifierProvider(create: (context) => CartProvider()),
         ChangeNotifierProvider(create: (context) => SearchProvider()),
+        ChangeNotifierProvider(create: (context) => StatusProvider()),
       ],
       child: const MyApp(),
     ),
@@ -90,6 +93,7 @@ class _RoutePageState extends State<RoutePage> {
     // SignUpPage(),
     HomePage(),
     ChartPage(),
+    OrdersPage(),
   ];
 
   @override

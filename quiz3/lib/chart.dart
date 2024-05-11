@@ -6,6 +6,7 @@ import 'package:quiz3/provider/cart_provider.dart';
 import 'package:quiz3/provider/product_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:quiz3/model/product.dart';
+import 'package:quiz3/provider/status_provider.dart';
 
 class ChartPage extends StatefulWidget {
   @override
@@ -41,6 +42,12 @@ class _ChartPageState extends State<ChartPage> {
   Widget build(BuildContext context) {
     var value = context.watch<CartProvider>();
     var productvalue = context.watch<ProductProvider>();
+    var status = context.watch<StatusProvider>();
+
+    // if(status.current.status == ""){
+    //   status.unpaid();
+    //   status.fetchData();
+    // }
 
     totalPrice = value.chart.fold(
       0,
@@ -50,6 +57,29 @@ class _ChartPageState extends State<ChartPage> {
             (product) => product.id == cartItem.item_id,
           ).price) * int.parse(cartItem.quantity),
     );
+
+    String statusMsg(){
+      if(status.current.status == "belum_bayar"){
+        return "Waiting for payment";
+      }
+      else if(status.current.status == "status diupdate sudah bayar"){
+        return "Waiting for confirmation";
+      }
+      else if(status.current.status == "pesanan_diterima"){
+        return "Resto accepted";
+      }
+      else if(status.current.status == "pesanan_ditolak"){
+        return "Resto rejected";
+      }
+      else if(status.current.status == "pesanaan_diantar"){
+        return "Driver on the way";
+      }
+      else if(status.current.status == "pesanan_selesai"){
+        return "Order completed";
+      }
+
+      return "";
+    }
     
     return Scaffold(
       appBar: AppBar(
@@ -85,7 +115,7 @@ class _ChartPageState extends State<ChartPage> {
                     ),
                     padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
                     child: Text(
-                          'Waiting for payment',
+                          statusMsg(),
                           style: TextStyle(fontSize: 18),
                     ),
                   ),
@@ -105,10 +135,46 @@ class _ChartPageState extends State<ChartPage> {
                       Expanded(child:
                         ElevatedButton(
                           onPressed: () {
+                            if(value.chart.isEmpty){
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('Your cart is empty'),
+                                  duration: Duration(seconds: 1),
+                                ),
+                              );
+                            }
+
+                            if(status.current.status == "belum_bayar" && !value.chart.isEmpty){
+                              status.pay();
+                            }
                           },
-                          child: Text('Pay Now'),
+                          child: Text((status.current.status == "belum_bayar" ? 'Pay Now' : 'Paid')),
                         ),
                       )
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Visibility(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            status.accept();
+                            value.removeAll();
+                          },
+                          child: Text('Accept'),
+                        ),
+                        visible: status.current.status == "status diupdate sudah bayar",
+                      ),
+                      Visibility(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            status.reject();
+                            value.removeAll();
+                          },
+                          child: Text('Reject'),
+                        ),
+                        visible: status.current.status == "status diupdate sudah bayar",
+                      ),
                     ],
                   ),
                 ],
@@ -201,12 +267,6 @@ class _ChartPageState extends State<ChartPage> {
                                             child: Icon(Icons.remove),
                                           ),
                                           onPressed: () {
-                                            // setState(() {
-                                            //   if (product.quantity > 1) {
-                                            //     product.quantity--;
-                                            //     product.totalPrice = double.parse(product.price) * product.quantity;
-                                            //   }
-                                            // });
                                             int qty = int.parse(cartItem.quantity) - 1;
                                             value.remove(context, cartItem.id);
                                             if(qty > 0)
@@ -226,10 +286,6 @@ class _ChartPageState extends State<ChartPage> {
                                             child: Icon(Icons.add),
                                           ),
                                           onPressed: () {
-                                            // setState(() {
-                                            //   product.quantity++;
-                                            //   product.totalPrice = double.parse(product.price) * product.quantity;
-                                            // });
                                             int qty = int.parse(cartItem.quantity) + 1;
                                             value.remove(context, cartItem.id);
                                             value.add(context, Cart(item_id: product.id, user_id: _user_id, quantity: qty.toString(), id: ''));

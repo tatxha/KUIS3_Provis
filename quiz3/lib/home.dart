@@ -9,6 +9,7 @@ import 'package:quiz3/provider/product_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:quiz3/provider/search_provider.dart';
+import 'package:quiz3/provider/status_provider.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({super.key});
@@ -63,6 +64,13 @@ class _HomePageState extends State<HomePage> {
     if (cart.items.isEmpty && !cartFetched) {
       cart.fetchData(context);
       cartFetched = true;
+    }
+
+    var status = context.watch<StatusProvider>();
+
+    if(status.current.status == ""){
+      status.unpaid();
+      status.fetchData();
     }
 
     final search = context.watch<SearchProvider>();

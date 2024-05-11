@@ -38,7 +38,6 @@ class CartProvider extends ChangeNotifier {
 
 
         for(Cart item in _chart){
-          print("AAAAAAAAAAAAAAAAAAAAAAAA " + item.item_id);
           // Find the product with the same item ID
           Product product = value.products.firstWhere(
             (product) => product.id == item.item_id,
@@ -50,9 +49,6 @@ class CartProvider extends ChangeNotifier {
             _items.add(product);
           }
         }
-
-        int len = cartList.length * 5;
-        print("0000000000000000000000000000000000000000000000000000000000000 "+len.toString());
 
         notifyListeners();
       } else {
@@ -137,80 +133,29 @@ class CartProvider extends ChangeNotifier {
 
       notifyListeners();
     } catch (e) {
-      throw Exception('Failed to add data');
+      throw Exception('Failed to delete data');
     }
   }
 
-  void addUpdate(BuildContext context, Cart item) async {
-    final value = Provider.of<ProductProvider>(context, listen: false);
+  void removeAll() async {
     try {
       String token = await auth.getToken();
       String user_id = await auth.getId();
-      final response = await http.post(
-        Uri.parse(url + "carts/"),
-        headers: <String, String>{
-          'accept': 'application/json',
-          'Authorization': 'Bearer $token',
-          'Content-Type': 'application/json',
-        },
-        body: jsonEncode(item.toJson()),
-      );
-
-      print(jsonEncode(item.toJson()));
-
-      if (response.statusCode == 200) {
-        // Product product = value.products.firstWhere(
-        //   (product) => product.id == item.item_id,
-        //   orElse: () => Product(id: "", title: "", price: "", description: "", img_name: ""),
-        // );
-
-        // // If a corresponding product is found, add it to the items list
-        // if (product.id != "" && product.title != "") {
-        //   _items.add(product);
-        // }
-
-        notifyListeners();
-      } else {
-        throw Exception('Failed to load data');
-      }
-    } catch (e) {
-      print('Error: $e');
-    }
-  }
-
-  void removeUpdate(BuildContext context, String cartId) async {
-    // notifyListeners();
-    final value = Provider.of<ProductProvider>(context, listen: false);
-    try {
-      String token = await auth.getToken();
-      String user_id = await auth.getId();
-
-      Cart cartDel = _chart.firstWhere(
-        (item) => item.id == cartId,
-        orElse: () => Cart(item_id: '', user_id: '', quantity: '', id: ''),
-      );
 
       final response = await http.delete(
-        Uri.parse(url + "carts/" + cartId),
+        Uri.parse(url + "clear_whole_carts_by_userid/" + user_id),
         headers: <String, String>{
           'accept': 'application/json',
           'Authorization': 'Bearer $token',
         },
       );
 
-      // Product product = value.products.firstWhere(
-      //   (product) => product.id == cartDel.item_id,
-      //   orElse: () => Product(id: "", title: "", price: "", description: "", img_name: ""),
-      // );
-
-      // // If a corresponding product is found, add it to the items list
-      // if (product.id != "") {
-      //   _items.remove(product);
-      // }
+      _items = [];
+      _chart = [];
 
       notifyListeners();
     } catch (e) {
-      throw Exception('Failed to add data');
+      throw Exception('Failed to delete data');
     }
   }
 
